@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import { BsCheckLg } from "react-icons/bs";
 
 function TodoApp() {
@@ -8,6 +8,8 @@ function TodoApp() {
   const [newTitle, setNewTitle] = useState("");
   const [newDescription, setNewDescription] = useState("");
   const [CompletedTodo, setCompletedTodo] = useState([]);
+  const [currentEdit, setCurrentEdit] = useState("");
+  const [currentEditedItem, setcurrentEditedItem] = useState("");
 
   const handleAddTodo = () => {
     let newTodoItem = {
@@ -59,6 +61,30 @@ function TodoApp() {
     setCompletedTodo(reducedTodo);
   }
 
+  const handleEdit = (index,item)=> {
+    setCurrentEdit(index);
+    setcurrentEditedItem(item)
+  }
+
+  const handleUpdateTitle = (value)=> {
+    setcurrentEditedItem((prev)=> {
+      return {...prev,title:value}
+    })
+  }
+
+  const handleUpdateDescription = (value)=> {
+    setcurrentEditedItem((prev)=> {
+      return {...prev,description:value}
+    })
+  }
+
+  const handleUpdateTodo = ()=> {
+    let newTodo = [...allTodos];
+    newTodo[currentEdit] = currentEditedItem;
+    setTodos(newTodo);
+    setCurrentEdit("");
+  }
+
   useEffect(() => {
     let savedTodos = JSON.parse(localStorage.getItem("todolist"));
     let savedCopmletedTodo = JSON.parse(localStorage.getItem("completedTodos"));
@@ -73,7 +99,7 @@ function TodoApp() {
 
   return (
     <div className="App">
-      <h1>My To Do List</h1>
+      <h1>My To Do List</h1>       
 
       <div className="todo-wrapper">
         <div className="inputs">
@@ -123,6 +149,26 @@ function TodoApp() {
 
         <div className="todo-list">
           {isCompleteScreen === false && allTodos.map((item, index) => {
+            if(currentEdit === index){
+              return(
+                <div className="edit_wrapper" key={index}>
+                <input type="text" placeholder="updated title" 
+                onChange={(e)=>handleUpdateTitle(e.target.value)} 
+                value={currentEditedItem.title}/>
+                <textarea type="text" placeholder="updated title"
+                rows={4}
+                onChange={(e)=>handleUpdateDescription(e.target.value)} 
+                value={currentEditedItem.description}/>
+                <button
+                  type="button"
+                  className="primarybtn"
+                  onClick={handleUpdateTodo}
+                >
+                  Update
+                </button>
+              </div>
+              )
+            }else {
               return (
                 <div className="todo-list-item" key={index}>
                   <div>
@@ -141,9 +187,15 @@ function TodoApp() {
                       title="Delete"
                       onClick={() => HandleDeleteTodo(index)}
                     />
+                    <AiOutlineEdit 
+                    className="check-icon"
+                    title="Edit"
+                    onClick={()=> handleEdit(index,item)}
+                    />
                   </div>
                 </div>
               );
+            }
             })}
 
             {isCompleteScreen === true && CompletedTodo.map((item, index) => {

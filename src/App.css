@@ -2,7 +2,7 @@ Body {
   background-color: #1f1e1e;
   /* background-color: white; */
   color:white;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 h1{
@@ -124,6 +124,7 @@ h1{
   font-size: 35px;
   cursor: pointer;
   margin-left: 10px;
+  margin-right: 10px;
 }
 
 .delete-icon:hover{
@@ -138,4 +139,26 @@ h1{
 
 .check-icon:hover{
   color: rgb(4, 196, 106);
+}
+
+.edit_wrapper{
+  background-color: #414040;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.edit_wrapper input,textarea {
+  border: 1px solid lightgray;
+  padding: 10px;
+  margin: 5px;
+  border-radius: 3px;
+}
+
+.edit_wrapper .primarybtn {
+  margin-left: auto;
+  margin-right: auto;
+  padding: 10px;
+  font-size: 16px;
+  width: fit-content;
 }
